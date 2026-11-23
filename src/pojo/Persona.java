@@ -13,13 +13,13 @@ public abstract class Persona {
     private String nombre;
     private Date fechNac;
     private String direccion;
-    private int telefono;
+    private String telefono;
     private String email;
 
     public Persona() {
     }
 
-    public Persona(String cedula, String nombre, Date fechNac, String direccion, int telefono, String email) {
+    public Persona(String cedula, String nombre, Date fechNac, String direccion, String telefono, String email) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.fechNac = fechNac;
@@ -60,11 +60,11 @@ public abstract class Persona {
         this.direccion = direccion;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
