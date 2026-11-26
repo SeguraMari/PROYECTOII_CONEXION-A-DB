@@ -1,18 +1,14 @@
 package view;
 
-
-
 import java.awt.Image;
 import java.awt.Toolkit;
-
 
 /**
  *
  * @author Graciela
  */
 public class FrmGestionPrincipal extends javax.swing.JFrame {
-    
-  
+
     /**
      * Creates new form FrmClinica
      */
@@ -125,14 +121,20 @@ public class FrmGestionPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGestionEstActionPerformed
 
-    
     @Override
     public Image getIconImage() {
-        Image retValue = Toolkit.getDefaultToolkit().
-                getImage(ClassLoader.getSystemResource("img/icon.png"));
+        java.net.URL recurso = getClass().getClassLoader()
+                .getResource("img/icon.png");
 
-        return retValue;
+        if (recurso != null) {
+
+            return Toolkit.getDefaultToolkit().getImage(recurso);
+
+        }
+
+        return null;
     }
+
     /**
      * @param args the command line arguments
      */

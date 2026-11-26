@@ -329,12 +329,12 @@ public class DlgNuevaCarrera extends javax.swing.JDialog {
     public javax.swing.JButton btnCancelar;
     public javax.swing.JButton btnGuardar;
     public javax.swing.JButton btnLimpiar;
-    private javax.swing.JComboBox<String> cmbGrado;
+    public javax.swing.JComboBox<String> cmbGrado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblGrado;
     private javax.swing.JLabel lblNomCarrera;
-    private javax.swing.JTextField txtNomCarrera;
+    public javax.swing.JTextField txtNomCarrera;
     // End of variables declaration//GEN-END:variables
 }

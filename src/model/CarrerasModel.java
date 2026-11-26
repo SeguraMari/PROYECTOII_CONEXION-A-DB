@@ -85,7 +85,7 @@ public class CarrerasModel {
 
     }
 
-    public boolean modifcarCarrera(Carreras carrera) {
+    public boolean modificarCarrera(Carreras carrera) {
 
         Connection conexion = DataBaseConnection.getConnection();
 
