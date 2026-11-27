@@ -89,6 +89,7 @@ public class EstudiantesController implements ActionListener, KeyListener {
 
             dlgB.setLocationRelativeTo(dlgA);
             dlgB.setVisible(true);
+            dlgB.txtCarnet.setEnabled(true);
 
         }
 
@@ -156,18 +157,39 @@ public class EstudiantesController implements ActionListener, KeyListener {
 
                     estudiante.setCarrera(idCarrera);
 
-                    if (estModel.insertarEstudiante(estudiante)) {
+                    // Registrar estudiante
+                    if (operacion == 1) {
 
-                        JOptionPane.showMessageDialog(dlgB,
-                                "Estudiante registrado correctamente.");
+                        if (estModel.insertarEstudiante(estudiante)) {
 
-                        dlgB.dispose();
-                        cargarTabla();
+                            JOptionPane.showMessageDialog(dlgB,
+                                    "Estudiante registrado correctamente.");
 
-                    } else {
+                            dlgB.dispose();
+                            cargarTabla();
 
-                        JOptionPane.showMessageDialog(dlgB,
-                                "Error al registrar el estudiante.");
+                        } else {
+
+                            JOptionPane.showMessageDialog(dlgB,
+                                    "Error al registrar el estudiante.");
+                        }
+
+                    } // Modificar estudiante
+                    else if (operacion == 2) {
+
+                        if (estModel.modificarEstudiante(estudiante)) {
+
+                            JOptionPane.showMessageDialog(dlgB,
+                                    "Estudiante modificado correctamente.");
+
+                            dlgB.dispose();
+                            cargarTabla();
+
+                        } else {
+
+                            JOptionPane.showMessageDialog(dlgB,
+                                    "Error al modificar el estudiante.");
+                        }
                     }
 
                 } catch (IllegalArgumentException ex) {
@@ -175,6 +197,110 @@ public class EstudiantesController implements ActionListener, KeyListener {
                     JOptionPane.showMessageDialog(dlgB,
                             "Las fechas deben tener el formato yyyy-MM-dd.");
                 }
+            }
+        }
+
+        //Boton Editar
+        if (e.getSource() == dlgA.btnEditar) {
+
+            if (dlgA.tblEstudiantes.getSelectedRowCount() == 1) {
+
+                int fila = dlgA.tblEstudiantes.getSelectedRow();
+
+                operacion = 2;
+
+                estudiante = new Estudiante();
+
+                estudiante.setCarnet(
+                        dlgA.tblEstudiantes.getValueAt(fila, 0).toString());
+
+                dlgB.txtCarnet.setText(
+                        dlgA.tblEstudiantes.getValueAt(fila, 0).toString());
+
+                dlgB.txtCedula.setText(
+                        dlgA.tblEstudiantes.getValueAt(fila, 1).toString());
+
+                dlgB.txtNombre.setText(
+                        dlgA.tblEstudiantes.getValueAt(fila, 2).toString());
+
+                dlgB.dtpFechaNac.setText(
+                        dlgA.tblEstudiantes.getValueAt(fila, 3).toString());
+
+                dlgB.txtDireccion.setText(
+                        dlgA.tblEstudiantes.getValueAt(fila, 4).toString());
+
+                dlgB.txtTel.setText(
+                        dlgA.tblEstudiantes.getValueAt(fila, 5).toString());
+
+                dlgB.txtEmail.setText(
+                        dlgA.tblEstudiantes.getValueAt(fila, 6).toString());
+
+                dlgB.dtpFechIngreso.setText(
+                        dlgA.tblEstudiantes.getValueAt(fila, 7).toString());
+
+                //Modifiqué esto, por un NullPointerException
+                Object fechaEgreso = dlgA.tblEstudiantes.getValueAt(fila, 8);
+
+                if (fechaEgreso == null) {
+                    dlgB.dtpFechEgreso.setDate(null);
+                } else {
+                    dlgB.dtpFechEgreso.setDate(
+                            java.time.LocalDate.parse(fechaEgreso.toString()));
+                }
+
+                cargarCarreras();
+
+                dlgB.cmbCarrera.setSelectedItem(
+                        obtenerNombreCarrera(Integer.parseInt(
+                                dlgA.tblEstudiantes.getValueAt(fila, 9).toString())));
+
+                dlgB.txtCarnet.setEnabled(false);
+
+                dlgB.setLocationRelativeTo(dlgA);
+                dlgB.setVisible(true);
+                
+            } else {
+
+                JOptionPane.showMessageDialog(dlgA,
+                        "Debe seleccionar un estudiante.");
+            }
+
+        }
+
+        //Boton Eliminar
+        if (e.getSource() == dlgA.btnEliminar) {
+
+            if (dlgA.tblEstudiantes.getSelectedRowCount() == 1) {
+
+                int fila = dlgA.tblEstudiantes.getSelectedRow();
+
+                String carnet = dlgA.tblEstudiantes.getValueAt(fila, 0).toString();
+
+                int respuesta = JOptionPane.showConfirmDialog(dlgA,
+                        "¿Está seguro de eliminar este estudiante?",
+                        "Confirmar eliminación",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (respuesta == JOptionPane.YES_OPTION) {
+
+                    if (estModel.eliminarEstudiante(carnet)) {
+
+                        JOptionPane.showMessageDialog(dlgA,
+                                "Estudiante eliminado correctamente.");
+
+                        cargarTabla();
+
+                    } else {
+
+                        JOptionPane.showMessageDialog(dlgA,
+                                "No se pudo eliminar el estudiante.");
+                    }
+                }
+
+            } else {
+
+                JOptionPane.showMessageDialog(dlgA,
+                        "Debe seleccionar un estudiante.");
             }
 
         }
@@ -290,207 +416,6 @@ public class EstudiantesController implements ActionListener, KeyListener {
         }
 
         dlgA.tblEstudiantes.setModel(modeloFiltrado);
-
-        //Boton Guardar
-        if (e.getSource() == dlgB.btnGuardar) {
-
-            if (dlgB.txtCarnet.getText().isEmpty()
-                    || dlgB.txtCedula.getText().isEmpty()
-                    || dlgB.txtNombre.getText().isEmpty()
-                    || dlgB.dtpFechaNac.getText().isEmpty()
-                    || dlgB.txtDireccion.getText().isEmpty()
-                    || dlgB.txtTel.getText().isEmpty()
-                    || dlgB.txtEmail.getText().isEmpty()
-                    || dlgB.dtpFechIngreso.getText().isEmpty()
-                    || dlgB.cmbCarrera.getSelectedIndex() == -1) {
-
-                JOptionPane.showMessageDialog(dlgB,
-                        "Debe completar todos los campos obligatorios.");
-
-            } else {
-
-                try {
-
-                    if (operacion == 1) {
-
-                        estudiante = new Estudiante();
-
-                        estudiante.setCarnet(dlgB.txtCarnet.getText());
-                        estudiante.setCedula(dlgB.txtCedula.getText());
-                        estudiante.setNombre(dlgB.txtNombre.getText());
-                        estudiante.setFechNac(java.sql.Date.valueOf(dlgB.dtpFechaNac.getText()));
-                        estudiante.setDireccion(dlgB.txtDireccion.getText());
-                        estudiante.setTelefono(dlgB.txtTel.getText());
-                        estudiante.setEmail(dlgB.txtEmail.getText());
-                        estudiante.setFechIngreso(java.sql.Date.valueOf(dlgB.dtpFechIngreso.getText()));
-
-                        if (dlgB.dtpFechEgreso.getText().isEmpty()) {
-                            estudiante.setFechEgreso(null);
-                        } else {
-                            estudiante.setFechEgreso(java.sql.Date.valueOf(dlgB.dtpFechEgreso.getText()));
-                        }
-
-                        int idCarrera = obtenerIdCarrera(
-                                dlgB.cmbCarrera.getSelectedItem().toString());
-
-                        estudiante.setCarrera(idCarrera);
-
-                        if (estModel.insertarEstudiante(estudiante)) {
-
-                            JOptionPane.showMessageDialog(dlgB,
-                                    "Estudiante registrado correctamente.");
-
-                            dlgB.dispose();
-                            cargarTabla();
-
-                        } else {
-
-                            JOptionPane.showMessageDialog(dlgB,
-                                    "Error al registrar el estudiante.");
-                        }
-                    } else if (operacion == 2) {
-
-                        estudiante.setCarnet(dlgB.txtCarnet.getText());
-                        estudiante.setCedula(dlgB.txtCedula.getText());
-                        estudiante.setNombre(dlgB.txtNombre.getText());
-                        estudiante.setFechNac(java.sql.Date.valueOf(dlgB.dtpFechaNac.getText()));
-                        estudiante.setDireccion(dlgB.txtDireccion.getText());
-                        estudiante.setTelefono(dlgB.txtTel.getText());
-                        estudiante.setEmail(dlgB.txtEmail.getText());
-                        estudiante.setFechIngreso(java.sql.Date.valueOf(dlgB.dtpFechIngreso.getText()));
-
-                        if (dlgB.dtpFechEgreso.getText().isEmpty()) {
-                            estudiante.setFechEgreso(null);
-                        } else {
-                            estudiante.setFechEgreso(java.sql.Date.valueOf(dlgB.dtpFechEgreso.getText()));
-                        }
-
-                        int idCarrera = obtenerIdCarrera(
-                                dlgB.cmbCarrera.getSelectedItem().toString());
-
-                        estudiante.setCarrera(idCarrera);
-
-                        if (estModel.modificarEstudiante(estudiante)) {
-
-                            JOptionPane.showMessageDialog(dlgB,
-                                    "Estudiante modificado correctamente.");
-
-                            dlgB.dispose();
-                            cargarTabla();
-
-                        } else {
-
-                            JOptionPane.showMessageDialog(dlgB,
-                                    "Error al modificar el estudiante.");
-                        }
-
-                    }
-
-                } catch (IllegalArgumentException ex) {
-
-                    JOptionPane.showMessageDialog(dlgB,
-                            "Las fechas deben tener el formato yyyy-MM-dd.");
-                }
-            }
-
-        }
-
-        //Boton Editar
-        if (e.getSource() == dlgA.btnEditar) {
-
-            if (dlgA.tblEstudiantes.getSelectedRowCount() == 1) {
-
-                int fila = dlgA.tblEstudiantes.getSelectedRow();
-
-                operacion = 2;
-
-                estudiante = new Estudiante();
-
-                estudiante.setCarnet(
-                        dlgA.tblEstudiantes.getValueAt(fila, 0).toString());
-
-                dlgB.txtCarnet.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 0).toString());
-
-                dlgB.txtCedula.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 1).toString());
-
-                dlgB.txtNombre.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 2).toString());
-
-                dlgB.dtpFechaNac.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 3).toString());
-
-                dlgB.txtDireccion.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 4).toString());
-
-                dlgB.txtTel.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 5).toString());
-
-                dlgB.txtEmail.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 6).toString());
-
-                dlgB.dtpFechIngreso.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 7).toString());
-
-                dlgB.dtpFechEgreso.setText(
-                        dlgA.tblEstudiantes.getValueAt(fila, 8).toString());
-
-                cargarCarreras();
-
-                dlgB.cmbCarrera.setSelectedItem(
-                        obtenerNombreCarrera(Integer.parseInt(
-                                dlgA.tblEstudiantes.getValueAt(fila, 9).toString())));
-
-                dlgB.txtCarnet.setEditable(false);
-
-                dlgB.setLocationRelativeTo(dlgA);
-                dlgB.setVisible(true);
-
-            } else {
-
-                JOptionPane.showMessageDialog(dlgA,
-                        "Debe seleccionar un estudiante.");
-            }
-
-        }
-
-        if (e.getSource() == dlgA.btnEliminar) {
-
-            if (dlgA.tblEstudiantes.getSelectedRowCount() == 1) {
-
-                int fila = dlgA.tblEstudiantes.getSelectedRow();
-
-                String carnet = dlgA.tblEstudiantes.getValueAt(fila, 0).toString();
-
-                int respuesta = JOptionPane.showConfirmDialog(dlgA,
-                        "¿Está seguro de eliminar este estudiante?",
-                        "Confirmar eliminación",
-                        JOptionPane.YES_NO_OPTION);
-
-                if (respuesta == JOptionPane.YES_OPTION) {
-
-                    if (estModel.eliminarEstudiante(carnet)) {
-
-                        JOptionPane.showMessageDialog(dlgA,
-                                "Estudiante eliminado correctamente.");
-
-                        cargarTabla();
-
-                    } else {
-
-                        JOptionPane.showMessageDialog(dlgA,
-                                "No se pudo eliminar el estudiante.");
-                    }
-                }
-
-            } else {
-
-                JOptionPane.showMessageDialog(dlgA,
-                        "Debe seleccionar un estudiante.");
-            }
-
-        }
 
     }
 

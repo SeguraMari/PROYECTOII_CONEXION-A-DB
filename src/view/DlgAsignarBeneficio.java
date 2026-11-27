@@ -28,7 +28,7 @@ public class DlgAsignarBeneficio extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtPaciente = new javax.swing.JTextField();
+        txtEstudiante = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstBenefitAsig = new javax.swing.JList<>();
@@ -51,16 +51,10 @@ public class DlgAsignarBeneficio extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         jLabel3.setText("Beneficios Asignados");
 
-        txtPaciente.setEditable(false);
-        txtPaciente.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEstudiante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/buscar.png"))); // NOI18N
 
-        lstBenefitAsig.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(lstBenefitAsig);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
@@ -92,7 +86,7 @@ public class DlgAsignarBeneficio extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -120,7 +114,7 @@ public class DlgAsignarBeneficio extends javax.swing.JDialog {
                     .addComponent(btnBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtPaciente)))
+                        .addComponent(txtEstudiante)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(55, 55, 55)
@@ -363,8 +357,8 @@ public class DlgAsignarBeneficio extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList<String> lstBenefitAsig;
-    private javax.swing.JList<String> lstBenefitDisp;
-    public javax.swing.JTextField txtPaciente;
+    public javax.swing.JList<String> lstBenefitAsig;
+    public javax.swing.JList<String> lstBenefitDisp;
+    public javax.swing.JTextField txtEstudiante;
     // End of variables declaration//GEN-END:variables
 }
