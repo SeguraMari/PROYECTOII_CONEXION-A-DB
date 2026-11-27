@@ -52,22 +52,9 @@ public class CarrerasController implements ActionListener, KeyListener {
     //Carga las carreras en la tabla
     public void cargarTabla() {
 
-        modelT = (DefaultTableModel) dlgA.tblCarreras.getModel();
+        modelT = carrModel.mostrarCarreras();
 
-        modelT.setRowCount(0);
-
-        ArrayList<Carreras> lista = carrModel.mostrarCarreras();
-
-        for (int i = 0; i < lista.size(); i++) {
-
-            Object fila[] = {
-                lista.get(i).getIdCarrera(),
-                lista.get(i).getNomCarrera(),
-                lista.get(i).getGrado()
-            };
-
-            modelT.addRow(fila);
-        }
+        dlgA.tblCarreras.setModel(modelT);
 
     }
 
@@ -241,26 +228,30 @@ public class CarrerasController implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
-        modelT = (DefaultTableModel) dlgA.tblCarreras.getModel();
+        DefaultTableModel modeloCompleto = carrModel.mostrarCarreras();
 
-        modelT.setRowCount(0);
+        DefaultTableModel modeloFiltrado = new DefaultTableModel(
+                new String[]{"ID", "Nombre", "Grado"}, 0);
 
-        ArrayList<Carreras> lista = carrModel.mostrarCarreras();
+        String buscar = dlgA.txtBuscar.getText().toLowerCase();
 
-        for (int i = 0; i < lista.size(); i++) {
+        for (int i = 0; i < modeloCompleto.getRowCount(); i++) {
 
-            if (lista.get(i).getNomCarrera().toLowerCase().contains(
-                    dlgA.txtBuscar.getText().toLowerCase())) {
+            String nombre = modeloCompleto.getValueAt(i, 1).toString();
+
+            if (nombre.toLowerCase().contains(buscar)) {
 
                 Object fila[] = {
-                    lista.get(i).getIdCarrera(),
-                    lista.get(i).getNomCarrera(),
-                    lista.get(i).getGrado()
+                    modeloCompleto.getValueAt(i, 0),
+                    modeloCompleto.getValueAt(i, 1),
+                    modeloCompleto.getValueAt(i, 2)
                 };
 
-                modelT.addRow(fila);
+                modeloFiltrado.addRow(fila);
             }
         }
+
+        dlgA.tblCarreras.setModel(modeloFiltrado);
 
     }
 

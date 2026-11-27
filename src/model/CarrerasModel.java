@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 import pojo.Carreras;
 
 /**
@@ -13,9 +13,11 @@ import pojo.Carreras;
  */
 public class CarrerasModel {
 
-    public ArrayList<Carreras> mostrarCarreras() {
+    public DefaultTableModel mostrarCarreras() {
 
-        ArrayList<Carreras> lista = new ArrayList<>();
+        String[] titulos = {"ID", "Nombre", "Grado"};
+
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
 
         Connection conexion = DataBaseConnection.getConnection();
 
@@ -29,17 +31,17 @@ public class CarrerasModel {
 
             while (resultado.next()) {
 
-                Carreras carrera = new Carreras();
+                String[] registro = new String[3];
 
-                carrera.setIdCarrera(resultado.getInt("idCarrera"));
-                carrera.setNomCarrera(resultado.getString("nomCarrera"));
-                carrera.setGrado(resultado.getString("grado"));
+                registro[0] = resultado.getString("idCarrera");
+                registro[1] = resultado.getString("nomCarrera");
+                registro[2] = resultado.getString("grado");
 
-                lista.add(carrera);
+                modelo.addRow(registro);
             }
 
-            consulta.close();
             resultado.close();
+            consulta.close();
             conexion.close();
 
         } catch (SQLException e) {
@@ -48,8 +50,7 @@ public class CarrerasModel {
 
         }
 
-        return lista;
-
+        return modelo;
     }
 
     public boolean insertarCarrera(Carreras carrera) {
@@ -147,6 +148,4 @@ public class CarrerasModel {
 
     }
     
-    
-
 }

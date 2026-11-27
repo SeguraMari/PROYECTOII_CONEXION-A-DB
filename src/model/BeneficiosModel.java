@@ -4,7 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+//import model.DataBaseConnection;
 import pojo.Beneficios;
 
 /**
@@ -13,14 +14,16 @@ import pojo.Beneficios;
  */
 public class BeneficiosModel {
 
-    public ArrayList<Beneficios> mostrarBeneficios() {
+    public DefaultTableModel mostrarBeneficios() {
 
-        ArrayList<Beneficios> lista = new ArrayList<>();
+        String[] titulos = {"ID", "Nombre", "Descripción", "Monto"};
+
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
 
         Connection conexion = DataBaseConnection.getConnection();
 
         if (conexion == null) {
-            return lista;
+            return modelo;
         }
 
         try {
@@ -33,14 +36,14 @@ public class BeneficiosModel {
 
             while (resultado.next()) {
 
-                Beneficios beneficio = new Beneficios();
+                String[] registro = new String[4];
 
-                beneficio.setIdBeneficio(resultado.getInt("idBeneficio"));
-                beneficio.setNomBeneficio(resultado.getString("nomBeneficio"));
-                beneficio.setDescripcion(resultado.getString("descripcion"));
-                beneficio.setMontoBeneficio(resultado.getDouble("montoBeneficio"));
+                registro[0] = resultado.getString("idBeneficio");
+                registro[1] = resultado.getString("nomBeneficio");
+                registro[2] = resultado.getString("descripcion");
+                registro[3] = resultado.getString("montoBeneficio");
 
-                lista.add(beneficio);
+                modelo.addRow(registro);
             }
 
             resultado.close();
@@ -53,8 +56,7 @@ public class BeneficiosModel {
 
         }
 
-        return lista;
-
+        return modelo;
     }
 
     public boolean insertarBeneficio(Beneficios beneficio) {

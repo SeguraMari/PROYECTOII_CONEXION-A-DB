@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 import pojo.Estudiante;
 
 /**
@@ -13,14 +13,20 @@ import pojo.Estudiante;
  */
 public class EstudianteModel {
 
-    public ArrayList<Estudiante> mostrarEstudiantes() {
+    public DefaultTableModel mostrarEstudiantes() {
 
-        ArrayList<Estudiante> lista = new ArrayList<>();
+        String[] titulos = {
+            "Carnet", "Cédula", "Nombre", "Fecha Nacimiento",
+            "Dirección", "Teléfono", "Email",
+            "Fecha Ingreso", "Fecha Egreso", "ID Carrera"
+        };
+
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
 
         Connection conexion = DataBaseConnection.getConnection();
 
         if (conexion == null) {
-            return lista;
+            return modelo;
         }
 
         try {
@@ -33,22 +39,20 @@ public class EstudianteModel {
 
             while (resultado.next()) {
 
-                Estudiante estudiante = new Estudiante();
+                String[] registro = new String[10];
 
-                estudiante.setCarnet(resultado.getString("carnet"));
+                registro[0] = resultado.getString("carnet");
+                registro[1] = resultado.getString("cedula");
+                registro[2] = resultado.getString("nombre");
+                registro[3] = resultado.getString("fechNac");
+                registro[4] = resultado.getString("direccion");
+                registro[5] = resultado.getString("telefono");
+                registro[6] = resultado.getString("email");
+                registro[7] = resultado.getString("fechIngreso");
+                registro[8] = resultado.getString("fechEgreso");
+                registro[9] = resultado.getString("idCarrera");
 
-                estudiante.setCedula(resultado.getString("cedula"));
-                estudiante.setNombre(resultado.getString("nombre"));
-                estudiante.setFechNac(resultado.getDate("fechNac"));
-                estudiante.setDireccion(resultado.getString("direccion"));
-                estudiante.setTelefono(resultado.getString("telefono"));
-                estudiante.setEmail(resultado.getString("email"));
-
-                estudiante.setFechIngreso(resultado.getDate("fechIngreso"));
-                estudiante.setFechEgreso(resultado.getDate("fechEgreso"));
-                estudiante.setCarrera(resultado.getInt("idCarrera"));
-
-                lista.add(estudiante);
+                modelo.addRow(registro);
             }
 
             resultado.close();
@@ -61,8 +65,7 @@ public class EstudianteModel {
 
         }
 
-        return lista;
-
+        return modelo;
     }
 
     public boolean insertarEstudiante(Estudiante estudiante) {

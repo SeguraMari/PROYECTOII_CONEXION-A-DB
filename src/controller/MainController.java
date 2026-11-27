@@ -9,9 +9,13 @@ import view.DlgCarrerasView;
 import view.DlgNuevaCarrera;
 import view.FrmGestionPrincipal;
 import model.BeneficiosModel;
+import model.EstudianteModel;
 import pojo.Beneficios;
+import pojo.Estudiante;
 import view.DlgBeneficiosView;
+import view.DlgEstudiantesView;
 import view.DlgNuevoBeneficio;
+import view.DlgNuevoEstudiante;
 
 /**
  *
@@ -20,15 +24,20 @@ import view.DlgNuevoBeneficio;
 public class MainController implements ActionListener {
 
     private FrmGestionPrincipal frmPrincipal;
+
     private DlgCarrerasView dlgCarreras;
     private DlgNuevaCarrera dlgNuevaCarrera;
-
-    private CarrerasController carrerasController;
 
     private DlgBeneficiosView dlgBeneficios;
     private DlgNuevoBeneficio dlgNuevoBeneficio;
 
+    private DlgEstudiantesView dlgEstudiantes;
+    private DlgNuevoEstudiante dlgNuevoEstudiante;
+
+    //Controladores
+    private CarrerasController carrerasController;
     private BeneficiosController beneficiosController;
+    private EstudiantesController estudiantesController;
 
     public MainController(FrmGestionPrincipal frmPrincipal) {
 
@@ -42,7 +51,12 @@ public class MainController implements ActionListener {
         dlgBeneficios = new DlgBeneficiosView(frmPrincipal, true);
         dlgNuevoBeneficio = new DlgNuevoBeneficio(frmPrincipal, true);
 
-        // Crear el controlador de Carreras
+        //Dlg De Estudiantes.
+        dlgEstudiantes = new DlgEstudiantesView(frmPrincipal, false);
+        dlgNuevoEstudiante = new DlgNuevoEstudiante(frmPrincipal, true);
+        
+
+        // --------Crear el controlador de Carreras-----------
         Carreras carrera = new Carreras();
         CarrerasModel carrModel = new CarrerasModel();
 
@@ -50,7 +64,10 @@ public class MainController implements ActionListener {
 
         carrerasController = new CarrerasController(
                 carrera, carrModel, dlgCarreras, dlgNuevaCarrera, modelo, 0);
+        
+        
 
+        // ---------Crear Controlador de Beneficios------------
         Beneficios beneficio = new Beneficios();
         BeneficiosModel beneModel = new BeneficiosModel();
 
@@ -60,12 +77,31 @@ public class MainController implements ActionListener {
         beneficiosController = new BeneficiosController(
                 beneficio, beneModel, dlgBeneficios,
                 dlgNuevoBeneficio, modeloBeneficios, 0);
+        
+   
 
-        // Escucha el botón de Gestión de Carreras
+        // ---------Crear Controlador de Estudiantes----------- 
+        Estudiante estudiante = new Estudiante();
+        EstudianteModel estModel = new EstudianteModel();
+
+        DefaultTableModel modeloEstudiantes
+                = (DefaultTableModel) dlgEstudiantes.tblEstudiantes.getModel();
+
+        estudiantesController = new EstudiantesController(
+                estudiante, estModel, dlgEstudiantes,
+                dlgNuevoEstudiante, modeloEstudiantes, 0);
+        
+        
+
+        // ------Escucha el botón de Gestión de Carreras--------
         this.frmPrincipal.btnGestionCarrera.addActionListener(this);
 
-        //Escucha el boton de Gestion de beneficios
+        //-------Escucha el boton de Gestión de beneficios-------
         this.frmPrincipal.btnGestionBenefit.addActionListener(this);
+
+        //-------Escucha el boton de Gestión de Estudiantes--------
+        this.frmPrincipal.btnGestionEst.addActionListener(this);
+
     }
 
     @Override
@@ -85,6 +121,12 @@ public class MainController implements ActionListener {
 
         }
 
+        if (e.getSource() == frmPrincipal.btnGestionEst) {
+
+            dlgEstudiantes.setLocationRelativeTo(frmPrincipal);
+            dlgEstudiantes.setVisible(true);
+        }
+
     }
-    
+
 }

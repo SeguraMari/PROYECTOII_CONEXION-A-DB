@@ -112,7 +112,7 @@ public class DlgBeneficiosView extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Nombre", "Descripción", "Monto"
+
             }
         ));
         tblBenefit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);

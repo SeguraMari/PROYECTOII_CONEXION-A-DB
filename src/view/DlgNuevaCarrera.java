@@ -77,11 +77,11 @@ public class DlgNuevaCarrera extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        lblNomCarrera.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
         lblNomCarrera.setText("Nombre de la Carrera: ");
+        lblNomCarrera.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
 
         lblGrado.setFont(new java.awt.Font("Segoe UI Emoji", 3, 12)); // NOI18N
         lblGrado.setText("Grado: ");

@@ -54,23 +54,9 @@ public class BeneficiosController implements ActionListener, KeyListener {
 
     public void cargarTabla() {
 
-        modelT = (DefaultTableModel) dlgA.tblBenefit.getModel();
+        modelT = beneModel.mostrarBeneficios();
 
-        modelT.setRowCount(0);
-
-        ArrayList<Beneficios> lista = beneModel.mostrarBeneficios();
-
-        for (int i = 0; i < lista.size(); i++) {
-
-            Object fila[] = {
-                lista.get(i).getIdBeneficio(),
-                lista.get(i).getNomBeneficio(),
-                lista.get(i).getDescripcion(),
-                lista.get(i).getMontoBeneficio()
-            };
-
-            modelT.addRow(fila);
-        }
+        dlgA.tblBenefit.setModel(modelT);
 
     }
 
@@ -265,39 +251,46 @@ public class BeneficiosController implements ActionListener, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
     }
+        
 
     @Override
     public void keyPressed(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
     }
+        
 
     @Override
     public void keyReleased(KeyEvent e) {
 
-        modelT = (DefaultTableModel) dlgA.tblBenefit.getModel();
+        DefaultTableModel modeloCompleto = beneModel.mostrarBeneficios();
 
-        modelT.setRowCount(0);
+        DefaultTableModel modeloFiltrado = new DefaultTableModel(
+                new String[]{"ID", "Nombre", "Descripción", "Monto"}, 0);
+        String buscar = dlgA.txtBuscar.getText().toLowerCase();
 
-        ArrayList<Beneficios> lista = beneModel.mostrarBeneficios();
+       System.out.println("Texto buscado: " + buscar);
 
-        for (int i = 0; i < lista.size(); i++) {
+        for (int i = 0; i < modeloCompleto.getRowCount(); i++) {
 
-            if (lista.get(i).getNomBeneficio().toLowerCase().contains(
-                    dlgA.txtBuscar.getText().toLowerCase())) {
+            String nombre = modeloCompleto.getValueAt(i, 1).toString();
+
+            if (nombre.toLowerCase().contains(buscar)) {
 
                 Object fila[] = {
-                    lista.get(i).getIdBeneficio(),
-                    lista.get(i).getNomBeneficio(),
-                    lista.get(i).getDescripcion(),
-                    lista.get(i).getMontoBeneficio()
+                    modeloCompleto.getValueAt(i, 0),
+                    modeloCompleto.getValueAt(i, 1),
+                    modeloCompleto.getValueAt(i, 2),
+                    modeloCompleto.getValueAt(i, 3)
                 };
 
-                modelT.addRow(fila);
+                modeloFiltrado.addRow(fila);
             }
         }
 
-    }
+        dlgA.tblBenefit.setModel(modeloFiltrado);
 
+    }
+    
 }
