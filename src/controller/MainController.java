@@ -11,13 +11,17 @@ import view.DlgNuevaCarrera;
 import view.FrmGestionPrincipal;
 import model.BeneficiosModel;
 import model.EstudianteModel;
+import model.PagosMensualesModel;
 import pojo.Beneficios;
 import pojo.Estudiante;
+import pojo.PagosMensuales;
 import view.DlgAsignarBeneficio;
 import view.DlgBeneficiosView;
 import view.DlgEstudiantesView;
+import view.DlgMostrarPlanilla;
 import view.DlgNuevoBeneficio;
 import view.DlgNuevoEstudiante;
+import view.DlgPagoMensual;
 
 /**
  *
@@ -40,11 +44,16 @@ public class MainController implements ActionListener {
     private DlgEstudiantesView dlgEstudiantes;
     private DlgNuevoEstudiante dlgNuevoEstudiante;
 
+    //Dlg Pago Mensual
+    private DlgPagoMensual dlgPagoMensual;
+    private DlgMostrarPlanilla dlgMostrarPlanilla;
+
     //Controladores
     private CarrerasController carrerasController;
     private BeneficiosController beneficiosController;
     private EstudiantesController estudiantesController;
     private AsignarBeneficioController asigBeneficioController;
+    private PagoMensualController pagoMensualController;
 
     public MainController(FrmGestionPrincipal frmPrincipal) {
 
@@ -62,6 +71,8 @@ public class MainController implements ActionListener {
         //Dlg De Estudiantes.
         dlgEstudiantes = new DlgEstudiantesView(frmPrincipal, false);
         dlgNuevoEstudiante = new DlgNuevoEstudiante(frmPrincipal, true);
+
+        dlgPagoMensual = new DlgPagoMensual(frmPrincipal, false);
 
         // --------Crear el controlador de Carreras-----------
         Carreras carrera = new Carreras();
@@ -93,7 +104,6 @@ public class MainController implements ActionListener {
         estudiantesController = new EstudiantesController(
                 estudiante, estModel, dlgEstudiantes,
                 dlgNuevoEstudiante, modeloEstudiantes, 0);
-        
 
         // ---------Crear Controlador de Asignar Beneficio----------
         Estudiante estudianteAsignar = new Estudiante();
@@ -108,6 +118,23 @@ public class MainController implements ActionListener {
                 beneEstModel,
                 dlgAsignarBenefit);
 
+        //---------Crear Controlador de Pagos Mensuales---------------
+        PagosMensuales pago = new PagosMensuales();
+
+        PagosMensualesModel pagoModel = new PagosMensualesModel();
+
+        EstudianteModel estModelPagos = new EstudianteModel();
+
+        DefaultTableModel modeloPagos
+                = (DefaultTableModel) dlgPagoMensual.tblMensualidades.getModel();
+
+        pagoMensualController = new PagoMensualController(
+                pago,
+                pagoModel,
+                estModelPagos,
+                dlgPagoMensual,
+                modeloPagos);
+
         // ------Escucha el botón de Gestión de Carreras--------
         this.frmPrincipal.btnGestionCarrera.addActionListener(this);
 
@@ -119,6 +146,9 @@ public class MainController implements ActionListener {
 
         //-------Escucha el boton de Gestión de Estudiantes--------
         this.frmPrincipal.btnGestionEst.addActionListener(this);
+
+        //-------Escucha el boton de Pagos Mensuales-------------
+        this.frmPrincipal.btnPagoMensual.addActionListener(this);
 
     }
 
@@ -152,6 +182,11 @@ public class MainController implements ActionListener {
             dlgAsignarBenefit.setLocationRelativeTo(frmPrincipal);
             dlgAsignarBenefit.setVisible(true);
 
+        }
+
+        if (e.getSource() == frmPrincipal.btnPagoMensual) {
+            dlgPagoMensual.setLocationRelativeTo(frmPrincipal);
+            dlgPagoMensual.setVisible(true);
         }
 
     }

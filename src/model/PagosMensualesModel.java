@@ -326,7 +326,7 @@ public class PagosMensualesModel {
 
         try {
 
-            String sql = "SELECT cedula FROM Estudiantes";
+            String sql = "SELECT DISTINCT cedula FROM BeneficiosEstudiantes";
 
             PreparedStatement consulta = conexion.prepareStatement(sql);
 
